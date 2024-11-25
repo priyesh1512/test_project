@@ -39,13 +39,19 @@ Route::middleware('auth')->group(function () {
 // Group of routes accessible only by users with the 'admin' role
 Route::middleware(['role:admin'])->group(function () {
     // Admin dashboard route
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+    Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::resource('hotels', HotelController::class);
+    Route::resource('bookings', BookingController::class)->only(['index', 'edit', 'update', 'destroy', 'show']);
 });
 
 // Group of routes accessible only by users with the 'user' role
 Route::middleware(['role:user'])->group(function () {
     // User dashboard route
     Route::get('/user', [UserController::class, 'index'])->name('user');
+    Route::get('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+    Route::get('bookings/create', [BookingController::class, 'create'])->name('bookings.create');
+    Route::post('bookings', [BookingController::class, 'store'])->name('bookings.store');
+    Route::get('bookings', [BookingController::class, 'index'])->name('bookings.index');
 });
 
 /*
