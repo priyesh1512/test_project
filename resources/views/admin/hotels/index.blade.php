@@ -48,8 +48,8 @@
                             <td>{{ $hotel->location }}</td>
                             <td>${{ number_format($hotel->price, 2) }}</td>
                             <td>
-                                <a href="{{ route('admin.hotels.edit', $hotel) }}" class="btn btn-sm btn-warning" style="margin-right: 5px;">Edit</a>
                                 <a href="{{ route('admin.hotels.show', $hotel) }}" class="btn btn-sm btn-info" style="margin-right: 5px;">View</a>
+                                <a href="{{ route('admin.hotels.edit', $hotel) }}" class="btn btn-sm btn-warning" style="margin-right: 5px;">Edit</a>
                                 <form action="{{ route('admin.hotels.destroy', $hotel) }}" method="POST" style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')

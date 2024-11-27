@@ -33,8 +33,8 @@
                             <td>{{ $booking->check_out }}</td>
                             <td>{{ $booking->guests }}</td>
                             <td>
-                                <a href="{{ route('admin.bookings.edit', $booking) }}" class="btn btn-sm btn-warning" style="margin-right: 5px;">Edit</a>
                                 <a href="{{ route('admin.bookings.show', $booking) }}" class="btn btn-sm btn-info" style="margin-right: 5px;">View</a>
+                                <a href="{{ route('admin.bookings.edit', $booking) }}" class="btn btn-sm btn-warning" style="margin-right: 5px;">Edit</a>
                                 <form action="{{ route('admin.bookings.destroy', $booking) }}" method="POST" style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')
