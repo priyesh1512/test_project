@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [ProfileController::class, 'logout'])->name('logout');
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     
     // Hotels routes
