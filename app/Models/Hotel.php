@@ -2,18 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Hotel extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id','name', 'location', 'price'];
+    protected $fillable = ['name', 'location', 'price'];
 
-    /**
-     * Get the bookings for the hotel.
-     */
     public function bookings()
     {
         return $this->hasMany(Booking::class);
