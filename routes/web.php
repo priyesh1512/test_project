@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/logout', [ProfileController::class, 'logout'])->name('logout');
 });
 
 Route::middleware(['role:admin'])->group(function () {
@@ -63,8 +64,6 @@ Route::middleware(['role:user'])->group(function () {
         Route::post('/', [UserController::class, 'store'])->name('store');
         Route::get('/{booking}', [UserController::class, 'show'])->name('show');
     });
-
-    Route::get('/hotels/check-availability', [UserController::class, 'checkAvailability'])->name('hotels.checkAvailability');
 });
 
 
