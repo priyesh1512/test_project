@@ -9,26 +9,16 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+    // Show the admin dashboard
     public function dashboard()
     {
         return view('admin.dashboard');
     }
 
-    public function index(Request $request)
+    // Hotel management methods
+    public function index()
     {
-        $query = Hotel::query();
-
-        if ($request->has('location')) {
-            $query->where('location', 'like', '%' . $request->location . '%');
-        }
-        if ($request->has('price_min')) {
-            $query->where('price', '>=', $request->price_min);
-        }
-        if ($request->has('price_max')) {
-            $query->where('price', '<=', $request->price_max);
-        }
-
-        $hotels = $query->paginate(10);
+        $hotels = Hotel::all();
         return view('admin.hotels.index', compact('hotels'));
     }
 
@@ -39,16 +29,15 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        // Validate and create hotel
+        $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
+            // Add other validations as needed
         ]);
 
-        Hotel::create($validated);
-
-        return redirect()->route('admin.hotels.index')
-            ->with('success', 'Hotel created successfully.');
+        Hotel::create($request->all());
+        return redirect()->route('admin.hotels.index')->with('success', 'Hotel created successfully.');
     }
 
     public function show(Hotel $hotel)
@@ -63,29 +52,27 @@ class AdminController extends Controller
 
     public function update(Request $request, Hotel $hotel)
     {
-        $validated = $request->validate([
+        // Validate and update hotel
+        $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
+            // Add other validations as needed
         ]);
 
-        $hotel->update($validated);
-
-        return redirect()->route('admin.hotels.index')
-            ->with('success', 'Hotel updated successfully.');
+        $hotel->update($request->all());
+        return redirect()->route('admin.hotels.index')->with('success', 'Hotel updated successfully.');
     }
 
     public function destroy(Hotel $hotel)
     {
         $hotel->delete();
-
-        return redirect()->route('admin.hotels.index')
-            ->with('success', 'Hotel deleted successfully.');
+        return redirect()->route('admin.hotels.index')->with('success', 'Hotel deleted successfully.');
     }
 
+    // Booking management methods
     public function bookingsIndex()
     {
-        $bookings = Booking::with(['user', 'hotel'])->latest()->paginate(10);
+        $bookings = Booking::all();
         return view('admin.bookings.index', compact('bookings'));
     }
 
@@ -96,32 +83,25 @@ class AdminController extends Controller
 
     public function bookingsEdit(Booking $booking)
     {
-        $users = User::all();
-        $hotels = Hotel::all();
-        return view('admin.bookings.edit', compact('booking', 'users', 'hotels'));
+        return view('admin.bookings.edit', compact('booking'));
     }
 
     public function bookingsUpdate(Request $request, Booking $booking)
     {
-        $validated = $request->validate([
+        // Validate and update booking
+        $request->validate([
             'user_id' => 'required|exists:users,id',
             'hotel_id' => 'required|exists:hotels,id',
-            'check_in' => 'required|date',
-            'check_out' => 'required|date|after:check_in',
-            'guests' => 'required|integer|min:1'
+            // Add other validations as needed
         ]);
 
-        $booking->update($validated);
-
-        return redirect()->route('admin.bookings.index')
-            ->with('success', 'Booking updated successfully.');
+        $booking->update($request->all());
+        return redirect()->route('admin.bookings.index')->with('success', 'Booking updated successfully.');
     }
 
     public function bookingsDestroy(Booking $booking)
     {
         $booking->delete();
-
-        return redirect()->route('admin.bookings.index')
-            ->with('success', 'Booking deleted successfully.');
+        return redirect()->route('admin.bookings.index')->with('success', 'Booking deleted successfully.');
     }
 }

@@ -17,27 +17,30 @@
                 @else
                     @if(Auth::user()->role === 'admin')
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.hotels.index') }}">Manage Hotels</a>
+                            <a class="nav-link" href="{{ route('dashboard') }}" style="color: #ecf0f1; margin: 0 10px;">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.bookings.index') }}">Manage Bookings</a>
+                            <a class="nav-link" href="{{ route('admin.hotels.index') }}" style="color: #ecf0f1; margin: 0 10px;">Manage Hotels</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.bookings.index') }}" style="color: #ecf0f1; margin: 0 10px;">Manage Bookings</a>
                         </li>
                     @elseif(Auth::user()->role === 'user')
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('user.dashboard') }}">Dashboard</a>
+                            <a class="nav-link" href="{{ route('dashboard') }}" style="color: #ecf0f1; margin: 0 10px;">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('user.bookings.index') }}">My Bookings</a>
+                            <a class="nav-link" href="{{ route('user.bookings.index') }}" style="color: #ecf0f1; margin: 0 10px;">My Bookings</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('user.bookings.create') }}">Book a Hotel</a>
+                            <a class="nav-link" href="{{ route('user.bookings.create') }}" style="color: #ecf0f1; margin: 0 10px;">Book a Hotel</a>
                         </li>
                     @endif
                     <li class="nav-item">
-                        <span class="nav-link" style="color: #3498db;">Hello, {{ Auth::user()->name }}</span>
+                        <a class="nav-link" href="{{ route('profile.edit') }}" style="color: #3498db; margin: 0 10px;">Edit Profile</a>
                     </li>
                     <li class="nav-item">
-                        <form method="POST" action="{{ route('logout') }}">
+                        <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                             @csrf
                             <button type="submit" class="btn btn-link nav-link" style="color: #e74c3c; border: none; padding: 8px 15px; text-decoration: none;">
                                 Logout
