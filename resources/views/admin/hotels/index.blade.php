@@ -27,7 +27,9 @@
             </div>
         </form>
 
-        @if($hotels->count())
+        @if($hotels->isEmpty())
+            <p style="text-align: center; color: #7f8c8d;">No hotels found.</p>
+        @else
             <table class="table table-bordered" style="background-color: #fff;">
                 <thead style="background-color: #34495e; color: #fff;">
                     <tr>
@@ -52,13 +54,15 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger" style="background-color: #e74c3c; border: none;">Delete</button>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            {{ $hotels->links() }}
+        @endif
     </div>
 </div>
 @endsection

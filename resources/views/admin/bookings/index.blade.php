@@ -8,7 +8,9 @@
     </div>
 
     <div style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-        @if($bookings->count())
+        @if($bookings->isEmpty())
+            <p style="text-align: center; color: #7f8c8d;">No bookings found.</p>
+        @else
             <table class="table table-bordered" style="background-color: #fff;">
                 <thead style="background-color: #34495e; color: #fff;">
                     <tr>
@@ -43,8 +45,8 @@
                     @endforeach
                 </tbody>
             </table>
-        @else
-            <p style="text-align: center; color: #7f8c8d;">No bookings found.</p>
+
+            {{ $bookings->links() }}
         @endif
     </div>
 </div>

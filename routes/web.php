@@ -30,11 +30,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [ProfileController::class, 'logout'])->name('logout');
 });
 
-Route::middleware(['role:admin'])->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     
-    // Add hotel management routes
-    Route::prefix('hotels')->name('admin.hotels.')->group(function () {
+    // Hotels routes
+    Route::prefix('admin/hotels')->name('admin.hotels.')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('index');
         Route::get('/create', [AdminController::class, 'create'])->name('create');
         Route::post('/', [AdminController::class, 'store'])->name('store');
@@ -44,8 +44,8 @@ Route::middleware(['role:admin'])->group(function () {
         Route::delete('/{hotel}', [AdminController::class, 'destroy'])->name('destroy');
     });
 
-    // Add booking management routes
-    Route::prefix('bookings')->name('admin.bookings.')->group(function () {
+    // Bookings routes
+    Route::prefix('admin/bookings')->name('admin.bookings.')->group(function () {
         Route::get('/', [AdminController::class, 'bookingsIndex'])->name('index');
         Route::get('/{booking}', [AdminController::class, 'bookingsShow'])->name('show');
         Route::get('/{booking}/edit', [AdminController::class, 'bookingsEdit'])->name('edit');
