@@ -4,7 +4,7 @@
 <div class="container">
     <div style="max-width: 800px; margin: 2rem auto; padding: 2rem; box-shadow: 0 0 15px rgba(0,0,0,0.1); border-radius: 8px; background: white;">
         <h1 style="color: #2c3e50; margin-bottom: 1.5rem; font-size: 2rem; border-bottom: 2px solid #eee; padding-bottom: 0.5rem;">Create Booking</h1>
-        <form id="booking-form" action="{{ route('user.bookings.store') }}" method="POST" style="display: grid; gap: 1.5rem;">
+        <form action="{{ route('user.bookings.store') }}" method="POST" style="display: grid; gap: 1.5rem;">
             @csrf
             <div class="mb-3">
                 <label for="hotel_id" class="form-label" style="display: block; margin-bottom: 0.5rem; color: #34495e; font-weight: bold;">Select Hotel</label>
@@ -47,49 +47,8 @@
                 @enderror
             </div>
 
-            <div id="availability-message" class="mb-3"></div>
-
             <button type="submit" class="btn btn-primary" style="background-color: #3498db; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s;">Book Now</button>
         </form>
     </div>
 </div>
-@endsection
-
-@section('scripts')
-<script>
-    const bookingForm = document.getElementById('booking-form');
-
-    bookingForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const hotelId = document.getElementById('hotel_id').value;
-        const checkIn = document.getElementById('check_in').value;
-        const checkOut = document.getElementById('check_out').value;
-
-        if (!hotelId || !checkIn || !checkOut) {
-            alert('Please fill all required fields.');
-            return;
-        }
-
-        fetch(`{{ route('hotels.checkAvailability') }}?hotel_id=${hotelId}&check_in=${checkIn}&check_out=${checkOut}`)
-            .then(response => response.json())
-            .then(data => {
-                const messageDiv = document.getElementById('availability-message');
-                const submitButton = bookingForm.querySelector('button[type="submit"]');
-                if (data.available) {
-                    messageDiv.innerHTML = '<div class="alert alert-success">Rooms are available!</div>';
-                    submitButton.disabled = false;
-                    // Optionally proceed to submit
-                    bookingForm.submit();
-                } else {
-                    messageDiv.innerHTML = '<div class="alert alert-danger">No rooms available for the selected dates.</div>';
-                    submitButton.disabled = true;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while checking availability.');
-            });
-    });
-</script>
 @endsection

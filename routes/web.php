@@ -57,7 +57,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::middleware(['role:user'])->group(function () {
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
     
-    // Fix booking routes to match view references
+    // Add this new route for availability checking
+    Route::get('/check-availability', [UserController::class, 'checkAvailability'])->name('user.checkAvailability');
+    
     Route::prefix('bookings')->name('user.bookings.')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
         Route::get('/create', [UserController::class, 'create'])->name('create');
