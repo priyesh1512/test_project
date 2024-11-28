@@ -37,9 +37,6 @@
                         </li>
                     @endif
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('profile.edit') }}" style="color: #3498db; margin: 0 10px;">Edit Profile</a>
-                    </li>
-                    <li class="nav-item">
                         <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                             @csrf
                             <button type="submit" class="btn btn-link nav-link" style="color: #e74c3c; border: none; padding: 8px 15px; text-decoration: none;">
