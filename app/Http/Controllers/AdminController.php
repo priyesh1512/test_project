@@ -17,9 +17,27 @@ class AdminController extends Controller
     }
 
     // Hotel management methods
-    public function index()
+    public function index(Request $request)
     {
-        $hotels = Hotel::all();
+        // Get hotels with pagination
+        $query = Hotel::query();
+
+        // Apply search filters if provided
+        if ($request->filled('location')) {
+            $query->where('location', 'like', '%' . $request->location . '%');
+        }
+
+        if ($request->filled('price_min')) {
+            $query->where('price', '>=', $request->price_min);
+        }
+
+        if ($request->filled('price_max')) {
+            $query->where('price', '<=', $request->price_max);
+        }
+
+        // Paginate results
+        $hotels = $query->paginate(10); // Change the number to set how many items per page
+
         return view('admin.hotels.index', compact('hotels'));
     }
 
@@ -71,9 +89,16 @@ class AdminController extends Controller
     }
 
     // Booking management methods
-    public function bookingsIndex()
+    public function bookingsIndex(Request $request)
     {
-        $bookings = Booking::all();
+        // Get bookings with pagination
+        $query = Booking::with(['user', 'hotel']); // Eager load user and hotel relationships
+
+        // Apply search filters if needed (you can add filters like date range if necessary)
+        // Example: if you have filters, you can add them here
+
+        $bookings = $query->paginate(10); // Change the number to set how many items per page
+
         return view('admin.bookings.index', compact('bookings'));
     }
 

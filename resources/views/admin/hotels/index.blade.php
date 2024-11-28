@@ -7,7 +7,7 @@
         <a href="{{ route('admin.hotels.create') }}" class="btn btn-primary" style="background-color: #3498db; border: none; padding: 10px 20px;">Add New Hotel</a>
     </div>
 
-    <div style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    <div style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0. 1);">
         {{-- Search and Filter Form --}}
         <form method="GET" action="{{ route('admin.hotels.index') }}" class="mb-4">
             <div class="row g-2">
