@@ -109,7 +109,11 @@ class AdminController extends Controller
 
     public function bookingsEdit(Booking $booking)
     {
-        return view('admin.bookings.edit', compact('booking'));
+        // Retrieve all users and hotels to populate the dropdowns
+        $users = User::all(); // Get all users
+        $hotels = Hotel::all(); // Get all hotels
+
+        return view('admin.bookings.edit', compact('booking', 'users', 'hotels'));
     }
 
     public function bookingsUpdate(Request $request, Booking $booking)
@@ -117,7 +121,6 @@ class AdminController extends Controller
         // Validate and update booking
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'hotel_id' => 'required|exists:hotels,id',
             // Add other validations as needed
         ]);
 
