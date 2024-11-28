@@ -13,11 +13,6 @@ class AdminController extends Controller
     // Show the admin dashboard
     public function dashboard()
     {
-        // Check if the user is authenticated and has the admin role
-        if (!Auth::check() || !Auth::user()->hasRole('admin')) {
-            return redirect('/login')->with('error', 'You do not have access to this area.');
-        }
-
         return view('admin.dashboard');
     }
 
