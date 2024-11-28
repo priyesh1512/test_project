@@ -17,7 +17,7 @@
                 @else
                     @if(Auth::user()->role === 'admin')
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('dashboard') }}" style="color: #ecf0f1; margin: 0 10px;">Dashboard</a>
+                            <a class="nav-link" href="{{ route('admin.dashboard') }}" style="color: #ecf0f1; margin: 0 10px;">Dashboard</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.hotels.index') }}" style="color: #ecf0f1; margin: 0 10px;">Manage Hotels</a>
