@@ -3,9 +3,16 @@
 @section('content')
 <div class="container">
     <h1>User Dashboard</h1>
+    <p class="mb-4">
+        Welcome to your dashboard! Here, you can manage all your hotel bookings in one place. 
+        Use the "Book a Hotel" button below to make a new reservation, or browse your existing bookings for details and updates. 
+        We aim to make your travel planning seamless and efficient.
+    </p>
+    
     <div class="mb-3">
         <a href="{{ route('user.bookings.create') }}" class="btn btn-primary">Book a Hotel</a>
     </div>
+    
     <h2>Your Bookings</h2>
     @if($bookings->count())
         <table class="table table-bordered">
@@ -37,7 +44,7 @@
             </tbody>
         </table>
     @else
-        <p>You have no bookings.</p>
+        <p>You have no bookings. Start planning your next trip today!</p>
     @endif
 </div>
 @endsection

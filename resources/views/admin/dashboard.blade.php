@@ -3,6 +3,11 @@
 @section('content')
 <div class="container">
     <h1>Admin Dashboard</h1>
+    <p class="mb-4">
+        Welcome to the Admin Dashboard! This is your central hub for managing hotels and bookings in the system. 
+        Use the tools provided below to add new hotels, manage existing properties, and oversee customer bookings. 
+        Ensure everything runs smoothly to provide a great experience for our users.
+    </p>
 
     @if (session('success'))
         <div class="alert alert-success">
