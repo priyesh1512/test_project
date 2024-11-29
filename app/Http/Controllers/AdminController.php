@@ -94,10 +94,29 @@ class AdminController extends Controller
         // Get bookings with pagination
         $query = Booking::with(['user', 'hotel']); // Eager load user and hotel relationships
 
-        // Apply search filters if needed (you can add filters like date range if necessary)
-        // Example: if you have filters, you can add them here
+        // Apply search filters if provided
+        if ($request->filled('user')) {
+            $query->whereHas('user', function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->user . '%');
+            });
+        }
 
-        $bookings = $query->paginate(10); // Change the number to set how many items per page
+        if ($request->filled('hotel')) {
+            $query->whereHas('hotel', function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->hotel . '%');
+            });
+        }
+
+        if ($request->filled('check_in')) {
+            $query->whereDate('check_in', '>=', $request->check_in);
+        }
+
+        if ($request->filled('check_out')) {
+            $query->whereDate('check_out', '<=', $request->check_out);
+        }
+
+        // Paginate results
+        $bookings = $query->paginate(10)->appends($request->query()); // Change the number to set how many items per page
 
         return view('admin.bookings.index', compact('bookings'));
     }

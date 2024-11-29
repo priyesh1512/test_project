@@ -7,6 +7,26 @@
         <a href="{{ route('admin.bookings.index') }}" class="btn btn-secondary" style="background-color: #95a5a6; border: none;">Refresh</a>
     </div>
 
+    <form method="GET" action="{{ route('admin.bookings.index') }}" class="mb-3">
+        <div class="row">
+            <div class="col-md-3">
+                <input type="text" name="user" class="form-control" placeholder="User Name" value="{{ request('user') }}">
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="hotel" class="form-control" placeholder="Hotel Name" value="{{ request('hotel') }}">
+            </div>
+            <div class="col-md-2">
+                <input type="date" name="check_in" class="form-control" placeholder="Check-In Date" value="{{ request('check_in') }}">
+            </div>
+            <div class="col-md-2">
+                <input type="date" name="check_out" class="form-control" placeholder="Check-Out Date" value="{{ request('check_out') }}">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary" style="background-color: #3498db; border: none;">Search</button>
+            </div>
+        </div>
+    </form>
+
     <div style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
         @if($bookings->isEmpty())
             <p style="text-align: center; color: #7f8c8d;">No bookings found.</p>
@@ -46,7 +66,7 @@
                 </tbody>
             </table>
 
-            {{ $bookings->links() }}
+            {{ $bookings->appends(request()->query())->links() }}
         @endif
     </div>
 </div>
