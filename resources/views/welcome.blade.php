@@ -51,15 +51,14 @@
         </div>
     </header>
 
-    <!-- About Section -->
+    <!-- Discount Offers Section -->
     <section class="py-5">
         <div class="container">
-            <h2 class="text-center mb-4">About Us</h2>
-            <p class="text-center">Our Hotel Booking System makes it easy to search, compare, and book hotels worldwide.
-                Whether it's a weekend getaway or a business trip, we make finding the perfect stay effortless.</p>
+            <h2 class="text-center mb-4">Exclusive Offers</h2>
+            <p class="text-center">Save big with our exclusive discounts and deals on top hotels around the world.</p>
         </div>
     </section>
-
+    
     <!-- Features Section -->
     <section class="bg-light py-5">
         <div class="container">
@@ -93,11 +92,12 @@
         </div>
     </section>
 
-    <!-- Discount Offers Section -->
+    <!-- About Section -->
     <section class="py-5">
         <div class="container">
-            <h2 class="text-center mb-4">Exclusive Offers</h2>
-            <p class="text-center">Save big with our exclusive discounts and deals on top hotels around the world.</p>
+            <h2 class="text-center mb-4">About Us</h2>
+            <p class="text-center">Our Hotel Booking System makes it easy to search, compare, and book hotels worldwide.
+                Whether it's a weekend getaway or a business trip, we make finding the perfect stay effortless.</p>
         </div>
     </section>
 
