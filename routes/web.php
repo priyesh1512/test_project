@@ -6,7 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\BookingController;
-
+use App\Http\Controllers\UserProfileController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -56,7 +56,9 @@ Route::middleware(['role:admin'])->group(function () {
 
 Route::middleware(['role:user'])->group(function () {
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
-    
+    Route::get('/profile', [UserProfileController::class, 'show'])->name('user.profile');
+    Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('user.profile.edit');
+    Route::post('/profile/update', [UserProfileController::class, 'update'])->name('user.profile.update');
     // Add this new route for availability checking
     Route::get('/check-availability', [UserController::class, 'checkAvailability'])->name('user.checkAvailability');
     

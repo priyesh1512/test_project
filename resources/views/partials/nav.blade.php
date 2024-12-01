@@ -35,6 +35,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('user.bookings.create') }}" style="color: #ecf0f1; margin: 0 10px;">Book a Hotel</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('user.profile') }}" style="color: #ecf0f1; margin: 0 10px;">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('user.profile.edit') }}" style="color: #ecf0f1; margin: 0 10px;">Edit Profile</a>
+                        </li>
                     @endif
                     <li class="nav-item">
                         <form method="POST" action="{{ route('logout') }}" style="display: inline;">
