@@ -81,4 +81,45 @@ class UserController extends Controller
             'message' => $available ? 'Rooms available' : 'No rooms available for selected dates'
         ]);
     }
+
+    public function edit(Booking $booking)
+    {
+        if ($booking->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $hotels = Hotel::all();
+        return view('user.bookings.edit', compact('booking', 'hotels'));
+    }
+
+    public function update(Request $request, Booking $booking)
+    {
+        if ($booking->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'hotel_id' => 'required|exists:hotels,id',
+            'check_in' => 'required|date',
+            'check_out' => 'required|date|after:check_in',
+            'guests' => 'required|integer|min:1'
+        ]);
+
+        $booking->update($validated);
+
+        return redirect()->route('user.bookings.show', $booking)
+            ->with('success', 'Booking updated successfully!');
+    }
+
+    public function destroy(Booking $booking)
+    {
+        if ($booking->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $booking->delete();
+
+        return redirect()->route('user.bookings.index')
+            ->with('success', 'Booking deleted successfully!');
+    }
 }

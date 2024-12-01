@@ -74,6 +74,9 @@ Route::middleware(['role:user'])->group(function () {
         Route::get('/create', [UserController::class, 'create'])->name('create');
         Route::post('/', [UserController::class, 'store'])->name('store');
         Route::get('/{booking}', [UserController::class, 'show'])->name('show');
+        Route::get('/{booking}/edit', [UserController::class, 'edit'])->name('edit');
+        Route::put('/{booking}', [UserController::class, 'update'])->name('update');
+        Route::delete('/{booking}', [UserController::class, 'destroy'])->name('destroy');
     });
 });
 

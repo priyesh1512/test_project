@@ -14,6 +14,7 @@
         </div>
         <div style="margin-top: 2rem;">
             <a href="{{ route('user.bookings.index') }}" class="btn btn-secondary" style="background-color: #34495e; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; transition: background-color 0.3s;">Back to Bookings</a>
+            <a href="{{ route('user.bookings.edit', $booking) }}" class="btn btn-primary" style="background-color: #f1c40f; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; margin-left: 10px;">Edit Booking</a>
         </div>
     </div>
 </div>

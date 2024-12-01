@@ -28,6 +28,7 @@
                             <td style="padding: 1rem;">{{ $booking->guests }}</td>
                             <td style="padding: 1rem; text-align: center;">
                                 <a href="{{ route('user.bookings.show', $booking) }}" class="btn btn-sm btn-info" style="background-color: #3498db; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; border: none;">View</a>
+                                <a href="{{ route('user.bookings.edit', $booking) }}" class="btn btn-sm btn-warning" style="background-color: #f1c40f; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; border: none; margin-left: 5px;">Edit</a>
                             </td>
                         </tr>
                     @endforeach
