@@ -7,6 +7,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\AdminProfileController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -32,7 +34,12 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    
+
+    // Add routes for admin profile
+    Route::get('/admin/profile', [AdminProfileController::class, 'show'])->name('admin.profile');
+    Route::get('/admin/profile/edit', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::post('/admin/profile/update', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+
     // Hotels routes
     Route::prefix('admin/hotels')->name('admin.hotels.')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('index');
