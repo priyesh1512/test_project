@@ -60,5 +60,38 @@
             <p>Why wait? Your next adventure is just a click away!</p>
         </div>
     @endif
+
+    <!-- Features Section -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <h2 class="text-center mb-4" style="color: #003366;">Dashboard Features</h2>
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <h4 style="color: #003366;">Booking Hotels</h4>
+                            <p>Easily add a bookings to your liking.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <h4 style="color: #003366;">View Bookings</h4>
+                            <p>Monitor and manage all your bookings in one place.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <h4 style="color: #003366;">Customer Support</h4>
+                            <p >Assistance to enhance their experience.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 @endsection
