@@ -2,26 +2,32 @@
 
 @section('content')
 <div class="container">
-    <h1>User Dashboard</h1>
-    <p class="mb-4">
-        Welcome to your dashboard! Here, you can manage all your hotel bookings in one place. 
-        Use the "Book a Hotel" button below to make a new reservation, or browse your existing bookings for details and updates. 
-        We aim to make your travel planning seamless and efficient. Don’t forget to check out exclusive offers and discounts available for our members.
+    <!-- Hero Section -->
+    <header class="hero-section py-5 text-center" style="background-color: #b3d7ff; color: #003366;">
+        <div class="container">
+            <h1 class="display-4 fw-bold">User  Dashboard</h1>
+            <p class="lead">Welcome to your personalized dashboard, where you can effortlessly manage all your hotel bookings.</p>
+        </div>
+    </header>
+
+    <p class="mb-4 text-center" style="color: #0056b3;">
+        To initiate a new reservation, simply click the "Book a Hotel" button below. You can also review your existing bookings for detailed information and updates. 
+        Our goal is to streamline your travel planning, ensuring a seamless and efficient experience. Be sure to explore exclusive offers and discounts available exclusively for our valued members.
     </p>
-    
-    <div class="mb-3">
-        <a href="{{ route('user.bookings.create') }}" class="btn btn-primary">Book a Hotel</a>
+
+    <div class="mb-4 text-center">
+        <a href="{{ route('user.bookings.create') }}" class="btn btn-primary btn-lg">Book a Hotel</a>
     </div>
 
-    <p class="text-muted">
-        Pro Tip: Booking early can help you secure the best rates and availability for your preferred hotels!
+    <p class="text-muted text-center" style="color: #0056b3;">
+        <strong>Pro Tip:</strong> Booking in advance can help you secure the best rates and availability for your preferred accommodations!
     </p>
-    
-    <h2>Your Bookings</h2>
+
+    <h2 class="mt-5" style="color: #003366;">Your Bookings</h2>
     @if($bookings->count())
-        <p class="mb-4">Here's a summary of all your reservations. Click on "View" to see more details or make changes to your booking.</p>
-        <table class="table table-bordered">
-            <thead>
+        <p class="mb-4">Below is a summary of all your reservations. Click on "View" to access more details or to make modifications to your booking.</p>
+        <table class="table table-bordered" style="border-color: #b3d7ff;">
+            <thead class="table-light" style="background-color: #e7f3ff;">
                 <tr>
                     <th>ID</th>
                     <th>Hotel</th>
@@ -49,9 +55,9 @@
             </tbody>
         </table>
     @else
-        <div class="alert alert-info">
-            <p>You have no bookings yet. Start planning your next trip today and explore a wide range of accommodations, from luxurious hotels to budget-friendly stays.</p>
-            <p>Why wait? Adventure is just a click away!</p>
+        <div class="alert alert-info" style="background-color: #e7f3ff; border-color: #b3d7ff;">
+            <p>You currently have no bookings. Start planning your next adventure today and discover a diverse range of accommodations, from luxurious hotels to budget-friendly options.</p>
+            <p>Why wait? Your next adventure is just a click away!</p>
         </div>
     @endif
 </div>
