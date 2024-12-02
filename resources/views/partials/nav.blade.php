@@ -31,6 +31,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.profile.edit') }}" style="color: #ecf0f1; margin: 0 10px;">Edit Profile</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.users.index') }}" style="color: #ecf0f1; margin: 0 10px;">Manage Users</a>
+                        </li>
                     @elseif(Auth::user()->role === 'user')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('dashboard') }}" style="color: #ecf0f1; margin: 0 10px;">Dashboard</a>

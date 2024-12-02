@@ -59,6 +59,17 @@ Route::middleware(['role:admin'])->group(function () {
         Route::put('/{booking}', [AdminController::class, 'bookingsUpdate'])->name('update');
         Route::delete('/{booking}', [AdminController::class, 'bookingsDestroy'])->name('destroy');
     });
+
+    // User management routes
+    Route::prefix('admin/users')->name('admin.users.')->group(function () {
+        Route::get('/', [AdminController::class, 'usersIndex'])->name('index');
+        Route::get('/create', [AdminController::class, 'usersCreate'])->name('create');
+        Route::post('/', [AdminController::class, 'usersStore'])->name('store');
+        Route::get('/{user}', [AdminController::class, 'usersShow'])->name('show');
+        Route::get('/{user}/edit', [AdminController::class, 'usersEdit'])->name('edit');
+        Route::put('/{user}', [AdminController::class, 'usersUpdate'])->name('update');
+        Route::delete('/{user}', [AdminController::class, 'usersDestroy'])->name('destroy');
+    });
 });
 
 Route::middleware(['role:user'])->group(function () {
