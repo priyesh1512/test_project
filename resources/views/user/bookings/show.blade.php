@@ -8,14 +8,16 @@
             <p style="margin: 0.5rem 0; font-size: 1.1rem;"><strong style="color: #34495e; width: 150px; display: inline-block;">Hotel:</strong> {{ $booking->hotel->name }}</p>
             <p style="margin: 0.5rem 0; font-size: 1.1rem;"><strong style="color: #34495e; width: 150px; display: inline-block;">Location:</strong> {{ $booking->hotel->location }}</p>
             <p style="margin: 0.5rem 0; font-size: 1.1rem;"><strong style="color: #34495e; width: 150px; display: inline-block;">Price per Night:</strong> ${{ number_format($booking->hotel->price, 2) }}</p>
-            <p style="margin: 0.5rem 0; font-size: 1.1rem;"><strong style="color: #34495e; width: 150px; display: inline-block;">Check-In:</strong> {{ $booking->check_in }}</p>
-            <p style="margin: 0.5rem 0; font-size: 1.1rem;"><strong style="color: #34495e; width: 150px; display: inline-block;">Check-Out:</strong> {{ $booking->check_out }}</p>
-            <p style="margin: 0.5rem 0; font-size: 1.1rem;"><strong style="color: #34495e; width: 150px; display: inline-block;">Guests:</strong> {{ $booking->guests }}</p>
+            <p style="margin: 0.5rem 0; font-size: 1.1rem;"><strong style="color: #34495e; width: 150px; display: inline-block;">Check-In Date:</strong> {{ $booking->check_in }}</p>
+            <p style="margin: 0.5rem 0; font-size: 1.1rem;"><strong style="color: #34495e; width: 150px; display: inline-block;">Check-Out Date:</strong> {{ $booking->check_out }}</p>
+            <p style="margin: 0.5rem 0; font-size: 1.1rem;"><strong style="color: #34495e; width: 150px; display: inline-block;">Number of Guests:</strong> {{ $booking->guests }}</p>
+            <p style="margin: 0.5rem 0; font-size: 1.1rem;"><strong style="color: #34495e; width: 150px; display: inline-block;">Total Amount:</strong> ${{ number_format($booking->payment_amount / 100, 2) }}</p>
+            <p style="margin: 0.5rem 0; font-size: 1.1rem;"><strong style="color: #34495e; width: 150px; display: inline-block;">Payment Status:</strong> {{ ucfirst($booking->payment_status) }}</p>
         </div>
-        <div style="margin-top: 2rem;">
-            <a href="{{ route('user.bookings.index') }}" class="btn btn-secondary" style="background-color: #34495e; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; transition: background-color 0.3s;">Back to Bookings</a>
-            <a href="{{ route('user.bookings.edit', $booking) }}" class="btn btn-primary" style="background-color: #f1c40f; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; margin-left: 10px;">Edit Booking</a>
-        </div>
+        
+        @if($booking->payment_status !== 'succeeded')
+            <a href="{{ route('user.bookings.pay.form', $booking) }}" class="btn btn-success" style="background-color: #2ecc71; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; margin-top: 1.5rem;">Pay Now</a>
+        @endif
     </div>
 </div>
 @endsection

@@ -11,7 +11,7 @@
                 <select class="form-select" id="hotel_id" name="hotel_id" required style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
                     <option value="">Choose...</option>
                     @foreach($hotels as $hotel)
-                        <option value="{{ $hotel->id }}" {{ old('hotel_id') == $hotel->id ? 'selected' : '' }}>
+                        <option value="{{ $hotel->id }}" data-price="{{ $hotel->price }}" {{ old('hotel_id') == $hotel->id ? 'selected' : '' }}>
                             {{ $hotel->name }} - ${{ number_format($hotel->price, 2) }}
                         </option>
                     @endforeach
@@ -47,6 +47,12 @@
                 @enderror
             </div>
 
+            <div class="mb-3">
+                <label for="total_amount" class="form-label" style="display: block; margin-bottom: 0.5rem; color: #34495e; font-weight: bold;">Total Amount:</label>
+                <input type="text" id="total_amount" name="total_amount_display" readonly style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; background-color: #f9f9f9;">
+                <input type="hidden" id="payment_amount" name="payment_amount" value="0">
+            </div>
+
             <div id="card-element"><!-- Stripe Card Element will be inserted here --></div>
             <div id="card-errors" role="alert" style="color: red;"></div>
             <button type="submit" class="btn btn-primary" style="background-color: #3498db; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s;">Book Now</button>
@@ -62,8 +68,57 @@
     card.mount('#card-element');
 
     const form = document.getElementById('booking-form');
+
+    // Elements to calculate total amount
+    const hotelSelect = document.getElementById('hotel_id');
+    const checkInInput = document.getElementById('check_in');
+    const checkOutInput = document.getElementById('check_out');
+    const guestsInput = document.getElementById('guests');
+    const totalAmountInput = document.getElementById('total_amount');
+
+    function calculateTotal() {
+        const selectedOption = hotelSelect.options[hotelSelect.selectedIndex];
+        const pricePerNight = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+        console.log('Price per Night:', pricePerNight);
+
+        const checkInDate = new Date(checkInInput.value);
+        const checkOutDate = new Date(checkOutInput.value);
+        const timeDiff = checkOutDate - checkInDate;
+        const numberOfNights = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) || 0;
+        console.log('Number of Nights:', numberOfNights);
+
+        const numberOfGuests = parseInt(guestsInput.value) || 1;
+        console.log('Number of Guests:', numberOfGuests);
+
+        const total = pricePerNight * numberOfNights * numberOfGuests;
+        console.log('Total Amount:', total);
+
+        totalAmountInput.value = isNaN(total) || total <= 0 ? '$0.00' : `$${total.toFixed(2)}`;
+        document.getElementById('payment_amount').value = isNaN(total) || total <= 0 ? '0' : Math.round(total * 100);
+        console.log('Payment Amount (cents):', document.getElementById('payment_amount').value);
+    }
+
+    hotelSelect.addEventListener('change', calculateTotal);
+    checkInInput.addEventListener('change', calculateTotal);
+    checkOutInput.addEventListener('change', calculateTotal);
+    guestsInput.addEventListener('input', calculateTotal);
+
+    // Initial calculation
+    calculateTotal();
+
     form.addEventListener('submit', async (e) => {
+        // Prevent default form submission
         e.preventDefault();
+
+        // Get the total amount in dollars
+        const totalAmountText = totalAmountInput.value.replace('$', '');
+        const totalAmount = Math.round(parseFloat(totalAmountText) * 100); // Convert to cents
+
+        if (isNaN(totalAmount) || totalAmount <= 0) {
+            alert('Please ensure all booking details are correctly filled.');
+            return;
+        }
+
         const {token, error} = await stripe.createToken(card);
         if (error) {
             document.getElementById('card-errors').textContent = error.message;

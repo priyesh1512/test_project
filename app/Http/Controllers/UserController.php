@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\Hotel;
 use Stripe\Stripe;
 use Stripe\Charge;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -40,11 +41,26 @@ class UserController extends Controller
             'stripeToken' => 'required'
         ]);
 
+        // Calculate number of nights
+        $checkIn = Carbon::parse($validated['check_in']);
+        $checkOut = Carbon::parse($validated['check_out']);
+        $numberOfNights = $checkIn->diffInDays($checkOut);
+
+        // Retrieve hotel price per night
+        $hotel = Hotel::find($validated['hotel_id']);
+        $pricePerNight = $hotel->price;
+
+        // Calculate total amount (in dollars)
+        $totalAmount = $numberOfNights * $pricePerNight;
+
+        // Convert to cents for Stripe
+        $amountInCents = $totalAmount * 100;
+
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         try {
-            Charge::create([
-                "amount" => 1000, // amount in cents
+            $charge = Charge::create([
+                "amount" => $amountInCents, // calculated amount in cents
                 "currency" => "usd",
                 "source" => $validated['stripeToken'],
                 "description" => "Payment for booking",
@@ -55,7 +71,11 @@ class UserController extends Controller
                 'hotel_id' => $validated['hotel_id'],
                 'check_in' => $validated['check_in'],
                 'check_out' => $validated['check_out'],
-                'guests' => $validated['guests']
+                'guests' => $validated['guests'],
+                'payment_id' => $charge->id,
+                'payment_amount' => $charge->amount,
+                'payment_currency' => $charge->currency,
+                'payment_status' => $charge->status,
             ]);
 
             return redirect()->route('user.bookings.show', $booking)
@@ -137,5 +157,52 @@ class UserController extends Controller
 
         return redirect()->route('user.bookings.index')
             ->with('success', 'Booking deleted successfully!');
+    }
+
+    /**
+     * Show the payment form for an existing booking.
+     */
+    public function showPaymentForm(Booking $booking)
+    {
+        if ($booking->user_id !== auth()->id() || $booking->payment_status === 'succeeded') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('user.bookings.pay', compact('booking'));
+    }
+
+    /**
+     * Process the payment for an existing booking.
+     */
+    public function processPayment(Request $request, Booking $booking)
+    {
+        if ($booking->user_id !== auth()->id() || $booking->payment_status === 'succeeded') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $request->validate([
+            'stripeToken' => 'required',
+        ]);
+
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        try {
+            $charge = Charge::create([
+                "amount" => $booking->payment_amount, // amount in cents
+                "currency" => $booking->payment_currency,
+                "source" => $request->stripeToken,
+                "description" => "Payment for booking ID: {$booking->id}",
+            ]);
+
+            $booking->update([
+                'payment_id' => $charge->id,
+                'payment_status' => $charge->status,
+            ]);
+
+            return redirect()->route('user.bookings.show', $booking)
+                ->with('success', 'Payment successful!');
+        } catch (\Exception $e) {
+            return back()->withErrors(['payment' => 'Payment failed: ' . $e->getMessage()]);
+        }
     }
 }

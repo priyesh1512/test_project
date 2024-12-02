@@ -77,6 +77,10 @@ Route::middleware(['role:user'])->group(function () {
         Route::get('/{booking}/edit', [UserController::class, 'edit'])->name('edit');
         Route::put('/{booking}', [UserController::class, 'update'])->name('update');
         Route::delete('/{booking}', [UserController::class, 'destroy'])->name('destroy');
+
+        // Add routes for payment
+        Route::get('/{booking}/pay', [UserController::class, 'showPaymentForm'])->name('pay.form');
+        Route::post('/{booking}/pay', [UserController::class, 'processPayment'])->name('pay.process');
     });
 });
 

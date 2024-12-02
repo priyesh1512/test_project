@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\BookingConfirmation;
 use Stripe\Stripe;
 use Stripe\Charge;
+use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {
@@ -82,6 +83,9 @@ class BookingController extends Controller
             'check_out' => $request->check_out,
             'guests'    => $request->guests,
         ]);
+
+        // Log booking creation
+        Log::info('Booking Created: ID ' . $booking->id);
 
         // Send confirmation email
         Mail::to(Auth::user()->email)->send(new BookingConfirmation($booking));
@@ -204,17 +208,44 @@ class BookingController extends Controller
     //     return view('payment');
     // }
 
-    // public function processPayment(Request $request)
-    // {
-    //     Stripe::setApiKey(env('STRIPE_SECRET'));
+    public function processPayment(Request $request, Booking $booking)
+    {
+        if ($booking->user_id !== auth()->id() || $booking->payment_status === 'succeeded') {
+            abort(403, 'Unauthorized action.');
+        }
 
-    //     Charge::create([
-    //         "amount" => 1000, // amount in cents
-    //         "currency" => "usd",
-    //         "source" => $request->stripeToken,
-    //         "description" => "Payment for booking",
-    //     ]);
+        $request->validate([
+            'stripeToken' => 'required',
+        ]);
 
-    //     // ...handle post-payment logic...
-    // }
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        try {
+            // Log before creating charge
+            Log::info('Processing payment for Booking ID: ' . $booking->id . ' Amount: ' . $booking->payment_amount);
+
+            $charge = Charge::create([
+                "amount" => $booking->payment_amount, // amount in cents
+                "currency" => $booking->payment_currency,
+                "source" => $request->stripeToken,
+                "description" => "Payment for booking ID: {$booking->id}",
+            ]);
+
+            $booking->update([
+                'payment_id' => $charge->id,
+                'payment_status' => $charge->status,
+            ]);
+
+            // Log successful payment
+            Log::info('Payment successful for Booking ID: ' . $booking->id . ' Charge ID: ' . $charge->id);
+
+            return redirect()->route('user.bookings.show', $booking)
+                ->with('success', 'Payment successful!');
+        } catch (\Exception $e) {
+            // Log payment failure
+            Log::error('Stripe Payment Error for Booking ID: ' . $booking->id . ': ' . $e->getMessage());
+
+            return back()->withErrors(['payment' => 'Payment failed: ' . $e->getMessage()]);
+        }
+    }
 }

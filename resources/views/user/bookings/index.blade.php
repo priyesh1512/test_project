@@ -14,6 +14,7 @@
                         <th style="padding: 1rem; text-align: left;">Check-In</th>
                         <th style="padding: 1rem; text-align: left;">Check-Out</th>
                         <th style="padding: 1rem; text-align: left;">Guests</th>
+                        <th style="padding: 1rem; text-align: left;">Payment Status</th>
                         <th style="padding: 1rem; text-align: center;">Actions</th>
                     </tr>
                 </thead>
@@ -26,8 +27,14 @@
                             <td style="padding: 1rem;">{{ $booking->check_in }}</td>
                             <td style="padding: 1rem;">{{ $booking->check_out }}</td>
                             <td style="padding: 1rem;">{{ $booking->guests }}</td>
+                            <td style="padding: 1rem;">
+                                {{ ucfirst($booking->payment_status) }}
+                            </td>
                             <td style="padding: 1rem; text-align: center;">
                                 <a href="{{ route('user.bookings.show', $booking) }}" class="btn btn-sm btn-info" style="background-color: #3498db; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; border: none;">View</a>
+                                @if($booking->payment_status !== 'succeeded')
+                                    <a href="{{ route('user.bookings.pay.form', $booking) }}" class="btn btn-sm btn-success" style="background-color: #2ecc71; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; border: none; margin-left: 5px;">Pay Now</a>
+                                @endif
                                 <a href="{{ route('user.bookings.edit', $booking) }}" class="btn btn-sm btn-warning" style="background-color: #f1c40f; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; border: none; margin-left: 5px;">Edit</a>
                             </td>
                         </tr>
