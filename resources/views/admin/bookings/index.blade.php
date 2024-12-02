@@ -40,6 +40,8 @@
                         <th>Check-In</th>
                         <th>Check-Out</th>
                         <th>Guests</th>
+                        <th>Payment Status</th>
+                        <th>Payment Amount</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -52,6 +54,8 @@
                             <td>{{ $booking->check_in }}</td>
                             <td>{{ $booking->check_out }}</td>
                             <td>{{ $booking->guests }}</td>
+                            <td>{{ $booking->payment_status }}</td>
+                            <td>{{ number_format($booking->payment_amount / 100, 2) }}</td>
                             <td>
                                 <a href="{{ route('admin.bookings.show', $booking) }}" class="btn btn-sm btn-info" style="margin-right: 5px;">View</a>
                                 <a href="{{ route('admin.bookings.edit', $booking) }}" class="btn btn-sm btn-warning" style="margin-right: 5px;">Edit</a>

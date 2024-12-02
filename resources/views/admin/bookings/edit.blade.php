@@ -53,6 +53,13 @@
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
+        <div class="mb-3">
+            <label for="payment_amount" class="form-label">Payment Amount</label>
+            <input type="number" class="form-control" id="payment_amount" name="payment_amount" value="{{ old('payment_amount', $booking->payment_amount / 100) }}" min="0" step="0.01" required>
+            @error('payment_amount')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
         <button type="submit" class="btn btn-primary">Update Booking</button>
     </form>
 </div>

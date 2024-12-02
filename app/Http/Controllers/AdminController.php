@@ -91,8 +91,8 @@ class AdminController extends Controller
     // Booking management methods
     public function bookingsIndex(Request $request)
     {
-        // Get bookings with pagination
-        $query = Booking::with(['user', 'hotel']); // Eager load user and hotel relationships
+        // Get bookings with pagination without payment details
+        $query = Booking::with(['user', 'hotel']); // Removed 'payment'
 
         // Apply search filters if provided
         if ($request->filled('user')) {
@@ -123,6 +123,7 @@ class AdminController extends Controller
 
     public function bookingsShow(Booking $booking)
     {
+        // No need to load 'payment' relationship
         return view('admin.bookings.show', compact('booking'));
     }
 
