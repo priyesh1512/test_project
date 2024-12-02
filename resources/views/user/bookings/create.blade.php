@@ -11,7 +11,7 @@
                 <select class="form-select" id="hotel_id" name="hotel_id" required style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
                     <option value="">Choose...</option>
                     @foreach($hotels as $hotel)
-                        <option value="{{ $hotel->id }}" data-price="{{ $hotel->price }}" {{ old('hotel_id') == $hotel->id ? 'selected' : '' }}>
+                        <option value="{{ $hotel->id }}" data-price="{{ number_format($hotel->price, 2, '.', '') }}" {{ old('hotel_id') == $hotel->id ? 'selected' : '' }}>
                             {{ $hotel->name }} - ${{ number_format($hotel->price, 2) }}
                         </option>
                     @endforeach
@@ -84,7 +84,8 @@
         const checkInDate = new Date(checkInInput.value);
         const checkOutDate = new Date(checkOutInput.value);
         const timeDiff = checkOutDate - checkInDate;
-        const numberOfNights = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) || 0;
+        let numberOfNights = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+        numberOfNights = numberOfNights > 0 ? numberOfNights : 1; // Ensure at least 1 night
         console.log('Number of Nights:', numberOfNights);
 
         const numberOfGuests = parseInt(guestsInput.value) || 1;

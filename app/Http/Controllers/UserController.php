@@ -38,7 +38,8 @@ class UserController extends Controller
             'check_in' => 'required|date',
             'check_out' => 'required|date|after:check_in',
             'guests' => 'required|integer|min:1',
-            'stripeToken' => 'required'
+            'stripeToken' => 'required',
+            'payment_amount' => 'required|integer|min:1' // Ensure payment_amount is present and valid
         ]);
 
         // Calculate number of nights
@@ -50,11 +51,11 @@ class UserController extends Controller
         $hotel = Hotel::find($validated['hotel_id']);
         $pricePerNight = $hotel->price;
 
-        // Calculate total amount (in dollars)
-        $totalAmount = $numberOfNights * $pricePerNight;
+        // Calculate total amount (in dollars) considering number of guests
+        $totalAmount = $numberOfNights * $pricePerNight * $validated['guests'];
 
         // Convert to cents for Stripe
-        $amountInCents = $totalAmount * 100;
+        $amountInCents = round($totalAmount * 100); // Ensure it's an integer
 
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
@@ -73,7 +74,7 @@ class UserController extends Controller
                 'check_out' => $validated['check_out'],
                 'guests' => $validated['guests'],
                 'payment_id' => $charge->id,
-                'payment_amount' => $charge->amount,
+                'payment_amount' => $charge->amount, // Ensure this reflects the updated amount
                 'payment_currency' => $charge->currency,
                 'payment_status' => $charge->status,
             ]);

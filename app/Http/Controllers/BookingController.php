@@ -12,6 +12,7 @@ use App\Mail\BookingConfirmation;
 use Stripe\Stripe;
 use Stripe\Charge;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
@@ -76,12 +77,25 @@ class BookingController extends Controller
             return back()->withErrors(['availability' => 'No rooms available for the selected dates.']);
         }
 
+        // Calculate number of nights
+        $checkIn = Carbon::parse($request->check_in);
+        $checkOut = Carbon::parse($request->check_out);
+        $numberOfNights = $checkIn->diffInDays($checkOut);
+
+        // Calculate total amount (in dollars) considering number of guests
+        $pricePerNight = $hotel->price;
+        $totalAmount = $numberOfNights * $pricePerNight * $request->guests;
+        $amountInCents = round($totalAmount * 100);
+
+        // Create booking without initial payment
         $booking = Booking::create([
             'user_id'   => Auth::id(),
             'hotel_id'  => $request->hotel_id,
             'check_in'  => $request->check_in,
             'check_out' => $request->check_out,
             'guests'    => $request->guests,
+            'payment_amount' => $amountInCents,
+            // Initialize other payment fields as needed
         ]);
 
         // Log booking creation
