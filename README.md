@@ -1,7 +1,3 @@
-Based on your database structure and omitting the payments table, here’s the adjusted README for your Hotel Management System:
-
----
-
 # Hotel Management System  
 
 ## Features  
