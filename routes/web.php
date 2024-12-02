@@ -80,5 +80,4 @@ Route::middleware(['role:user'])->group(function () {
     });
 });
 
-
 require __DIR__.'/auth.php';

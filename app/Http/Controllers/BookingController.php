@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\BookingConfirmation;
+use Stripe\Stripe;
+use Stripe\Charge;
 
 class BookingController extends Controller
 {
@@ -195,4 +197,24 @@ class BookingController extends Controller
 
         return view('user.dashboard', compact('bookings'));
     }
+
+    // Remove or comment out the following methods
+    // public function showPaymentForm()
+    // {
+    //     return view('payment');
+    // }
+
+    // public function processPayment(Request $request)
+    // {
+    //     Stripe::setApiKey(env('STRIPE_SECRET'));
+
+    //     Charge::create([
+    //         "amount" => 1000, // amount in cents
+    //         "currency" => "usd",
+    //         "source" => $request->stripeToken,
+    //         "description" => "Payment for booking",
+    //     ]);
+
+    //     // ...handle post-payment logic...
+    // }
 }

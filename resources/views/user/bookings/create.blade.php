@@ -4,7 +4,7 @@
 <div class="container">
     <div style="max-width: 800px; margin: 2rem auto; padding: 2rem; box-shadow: 0 0 15px rgba(0,0,0,0.1); border-radius: 8px; background: white;">
         <h1 style="color: #2c3e50; margin-bottom: 1.5rem; font-size: 2rem; border-bottom: 2px solid #eee; padding-bottom: 0.5rem;">Create Booking</h1>
-        <form action="{{ route('user.bookings.store') }}" method="POST" style="display: grid; gap: 1.5rem;">
+        <form action="{{ route('user.bookings.store') }}" method="POST" id="booking-form" style="display: grid; gap: 1.5rem;">
             @csrf
             <div class="mb-3">
                 <label for="hotel_id" class="form-label" style="display: block; margin-bottom: 0.5rem; color: #34495e; font-weight: bold;">Select Hotel</label>
@@ -47,8 +47,34 @@
                 @enderror
             </div>
 
+            <div id="card-element"><!-- Stripe Card Element will be inserted here --></div>
+            <div id="card-errors" role="alert" style="color: red;"></div>
             <button type="submit" class="btn btn-primary" style="background-color: #3498db; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s;">Book Now</button>
         </form>
     </div>
 </div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe('{{ env('STRIPE_KEY') }}');
+    const elements = stripe.elements();
+    const card = elements.create('card');
+    card.mount('#card-element');
+
+    const form = document.getElementById('booking-form');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const {token, error} = await stripe.createToken(card);
+        if (error) {
+            document.getElementById('card-errors').textContent = error.message;
+        } else {
+            const hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'stripeToken');
+            hiddenInput.setAttribute('value', token.id);
+            form.appendChild(hiddenInput);
+            form.submit();
+        }
+    });
+</script>
 @endsection

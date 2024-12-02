@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Hotel;
+use Stripe\Stripe;
+use Stripe\Charge;
 
 class UserController extends Controller
 {
@@ -34,19 +36,33 @@ class UserController extends Controller
             'hotel_id' => 'required|exists:hotels,id',
             'check_in' => 'required|date',
             'check_out' => 'required|date|after:check_in',
-            'guests' => 'required|integer|min:1'
+            'guests' => 'required|integer|min:1',
+            'stripeToken' => 'required'
         ]);
 
-        $booking = Booking::create([
-            'user_id' => auth()->id(),
-            'hotel_id' => $validated['hotel_id'],
-            'check_in' => $validated['check_in'],
-            'check_out' => $validated['check_out'],
-            'guests' => $validated['guests']
-        ]);
+        Stripe::setApiKey(env('STRIPE_SECRET'));
 
-        return redirect()->route('user.bookings.show', $booking)
-            ->with('success', 'Booking created successfully!');
+        try {
+            Charge::create([
+                "amount" => 1000, // amount in cents
+                "currency" => "usd",
+                "source" => $validated['stripeToken'],
+                "description" => "Payment for booking",
+            ]);
+
+            $booking = Booking::create([
+                'user_id' => auth()->id(),
+                'hotel_id' => $validated['hotel_id'],
+                'check_in' => $validated['check_in'],
+                'check_out' => $validated['check_out'],
+                'guests' => $validated['guests']
+            ]);
+
+            return redirect()->route('user.bookings.show', $booking)
+                ->with('success', 'Booking created and payment successful!');
+        } catch (\Exception $e) {
+            return back()->withErrors(['payment' => 'Payment failed: ' . $e->getMessage()]);
+        }
     }
 
     public function show(Booking $booking)
